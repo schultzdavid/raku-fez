@@ -36,14 +36,9 @@ sub prompt-wrapper(Str:D $prompt --> Str) {
   prompt($prompt);
 }
 
-if !config-value('ecosystems') {
+if !config-value('ecosystems')  {
   my $result = '-';
-  while $result.lc !~~ 'y'|'ye'|'yes'|'n'|'no'|'' {
-    $result = prompt-wrapper('Would you like to update your current config for use with the new ecosystem (Y/n)? ');
-  }
-  if $result.lc ~~ 'n'|'no' {
-    log(FATAL, 'In order for fez to use the new ecosystem code, the config must be updated');
-  }
+  log(INFO, "Legacy config is missing ecosystem value, updating");
   my %config = user-config;
   log(INFO, "Current config is:\n" ~ to-j(%config));
 
@@ -52,15 +47,6 @@ if !config-value('ecosystems') {
   };
 
   log(INFO, "New config is:\n" ~ to-j(%config));
-
-  $result = '-';
-  while $result.lc !~~ 'y'|'ye'|'yes'|'n'|'no'|'' {
-    $result = prompt-wrapper('Proceed (y/N)? ');
-  }
-
-  if $result.lc ~~ 'n'|'no'|'' {
-    log(FATAL, 'Request denied.');
-  }
 
   write-to-user-config(%config);
 }

@@ -37,7 +37,6 @@ sub prompt-wrapper(Str:D $prompt --> Str) {
 }
 
 if !config-value('ecosystems')  {
-  my $result = '-';
   log(INFO, "Legacy config is missing ecosystem value, updating");
   my %config = user-config;
   log(INFO, "Current config is:\n" ~ to-j(%config));
@@ -666,10 +665,10 @@ multi MAIN('upload', Str :i(:$file) = '', Bool :d(:$dry-run) = False,  Bool :s(:
 }
 
 
-multi MAIN('ls', Str $name?, Str() :$url = '/index.json') is export {
+multi MAIN('ls', Str $name?, Str() :$url = '/') is export {
   MAIN('list', $name, :$url);
 }
-multi MAIN('list', Str $name?, Str() :$url = '/index.json') is export {
+multi MAIN('list', Str $name?, Str() :$url = '/') is export {
   MAIN('login') unless config-value('key');
   my $show-login = False;
   my $response = org-list(config-value('key'));

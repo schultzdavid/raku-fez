@@ -476,6 +476,10 @@ multi MAIN('review') is export {
     );
     $has-error = True;
   }
+  log(
+    WARN,
+    'no readme was found in the root of the repo'
+  ) unless @manifest.first({$_.lc ~~ m:i/^'README'/});
 
   exit 1 if $has-error && !($*DIST//False);
 
@@ -600,7 +604,7 @@ multi MAIN('org', 'meta', Str $org-name, Str :n(:$name) is copy, Str :w(:$websit
 }
 
 multi MAIN('up', Str :i(:$file) = '', Bool :d(:$dry-run) = False, Bool :s(:$save-autobundle) = False, Bool :f(:$force) = False) is export {
-  MAIN('upload', :i($file), :s($save-autobundle), :f($force));
+  MAIN('upload', :i($file), :d($dry-run), :s($save-autobundle), :f($force));
 }
 multi MAIN('upload', Str :i(:$file) = '', Bool :d(:$dry-run) = False,  Bool :s(:$save-autobundle) = False, Bool :f(:$force) = False) is export {
   MAIN('login') unless config-value('key');
@@ -672,6 +676,7 @@ multi MAIN('list', Str $name?, Str() :$url = '/') is export {
   MAIN('login') unless config-value('key');
   my $show-login = False;
   my $response = org-list(config-value('key'));
+  dd $response;
   if ! $response.success {
     log(ERROR, 'Failed to retrieve user orgs, the following list may be incomplete');
     $show-login = True;

@@ -20,6 +20,7 @@ my @test  = qw<Cat.png Bat.png Rat.png car.png a/list.png mom.jpg cat.jpg landsc
             qw</a-xyz/file.js /b-xyz/file.js /c-xyz/file.js /d-xyz/file.js /e-xyz/file.js>,
             qw</public/file.js /dist/file.js /src/file.js /build/file.js>,
             qw<file.js file.min.js file.umd.js file.min.umd.js file.es6.js>,
+            qw<.precomp lib/.precomp lib/M.rakumod readme.md>,
             ;
 
 sub t($globs, @input, @expects, :$name = "t{$tests++}") {
@@ -49,6 +50,7 @@ my %tests = (
   '*.js'           => (qw<one.js two.js three.js 3.js>, @test[1]),
   '?.js'           => (@('3.js'), @test[1]),
   '/**/*.js'       => (@test[2], @test[2]),
+  '**/.precomp'    => (qw<.precomp lib/.precomp>, @test[7]),
 
 
   'file@(.min|.umd).js'         => (qw<file.min.js file.umd.js>, @test[6]),

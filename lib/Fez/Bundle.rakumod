@@ -22,7 +22,7 @@ for @chandlers -> $h {
 die 'Unable to find a suitable handler for bundling (tried pax, and tar), please ensure one is in your path'
   unless @handlers.elems;
 
-constant @ignored-dirs = '.git/*', 'sdist/*', '.github/*';
+constant @ignored-dirs = '.git/*', 'sdist/*', '.github/*', '**/.precomp';
 
 sub bundle($target, :$dry-run = False) is export {
   my $sdist  = $target.IO.absolute.IO.add('sdist');
